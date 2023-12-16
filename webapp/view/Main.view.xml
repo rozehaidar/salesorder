@@ -2,6 +2,57 @@
     xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
-        <content />
+    <content>
+    <!-- salesOrderSet, sales Oeders -->
+        <Text text="Test"/>
+            <Table
+                id="productsTable"
+                
+                items="{/CustomerSet}"
+                headerText="Products (Click on an item to set as navigated)"
+            >
+<!-- OrderId, ERDAT,... -->
+                <columns>
+                    <Column
+                        id="kunnrCol"
+                        width="12em"
+                    >
+                        <VBox>
+                            <Text text="Vbeln" />
+                        </VBox>
+                    </Column>
+                    <Column
+                        id="Erdat"
+                        minScreenWidth="Tablet"
+                        demandPopin="true"
+                        hAlign="End"
+                    >
+                        <Text text="Erdat" />
+                    </Column>
+                   
+                </columns>
+                <items>
+                    <ColumnListItem
+                        type="Active"
+                        vAlign="Middle"
+                        navigated="{
+						parts: [
+							'settings>/navigatedItem',
+							'CustomerID'
+						],
+						formatter: '.isNavigated'
+					}"
+                        press="onPress"
+                    >
+                        <cells>
+                            <ObjectIdentifier
+                                text="{Vbeln}"
+                            />
+                            <Text text="{Erdat}" />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </content>
     </Page>
 </mvc:View>
