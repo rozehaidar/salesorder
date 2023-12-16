@@ -1,20 +1,46 @@
 <mvc:View controllerName="ap.salesorder.controller.Main"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-    <content>
+    xmlns="sap.m"
+	xmlns:f="sap.f"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core" displayBlock="true">
+    <f:DynamicPage id="page">
+        <f:header>
+            <f:DynamicPageHeader>
+                <f:content>
+
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <Button icon="sap-icon://activities" type="Transparent" press="onNavToSalesOrderItems" text="Nav to Sales Order Items" />
     <!-- salesOrderSet, sales Oeders -->
-        <Text text="Test"/>
             <Table
-                id="productsTable"
+                id="salesOrderTable"
                 
-                items="{/CustomerSet}"
-                headerText="Products (Click on an item to set as navigated)"
+                items="{/SalesOrderSet}"
+ 
             >
+            <headerToolbar>
+				<OverflowToolbar>
+					<Title text="SalesOrder" level="H2"/>
+					<ToolbarSpacer/>
+                    <Button icon="sap-icon://excel-attachment" press="onExport"/>
+					<Button
+						tooltip="Sort"
+						icon="sap-icon://sort"
+						press="handleSortButtonPressed"/>
+					<Button
+						tooltip="Filter"
+						icon="sap-icon://filter"
+						press="handleFilterButtonPressed"/>
+
+				</OverflowToolbar>
+			</headerToolbar>
 <!-- OrderId, ERDAT,... -->
                 <columns>
                     <Column
-                        id="kunnrCol"
+                        id="VbelnCol"
                         width="12em"
                     >
                         <VBox>
@@ -22,37 +48,21 @@
                         </VBox>
                     </Column>
                     <Column
-                        id="Erdat"
-                        minScreenWidth="Tablet"
-                        demandPopin="true"
-                        hAlign="End"
+                        id="Erdat" minScreenWidth="Tablet" demandPopin="true" hAlign="End"
                     >
                         <Text text="Erdat" />
                     </Column>
                    
                 </columns>
                 <items>
-                    <ColumnListItem
-                        type="Active"
-                        vAlign="Middle"
-                        navigated="{
-						parts: [
-							'settings>/navigatedItem',
-							'CustomerID'
-						],
-						formatter: '.isNavigated'
-					}"
-                        press="onPress"
-                    >
+                     <ColumnListItem type="Navigation" vAlign="Middle" press=".onListItemPress">
                         <cells>
-                            <ObjectIdentifier
-                                text="{Vbeln}"
-                            />
+                            <ObjectIdentifier text="{Vbeln}"/>
                             <Text text="{Erdat}" />
                         </cells>
                     </ColumnListItem>
                 </items>
             </Table>
-        </content>
-    </Page>
+        </f:content>
+    </f:DynamicPage>
 </mvc:View>

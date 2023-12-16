@@ -57,7 +57,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "flexEnabled": false,
     "dependencies": {
       "minUI5Version": "1.120.3",
       "libs": {
@@ -68,7 +68,8 @@
         "sap.ui.comp": {},
         "sap.ui.generic.app": {},
         "sap.ui.table": {},
-        "sap.ushell": {}
+        "sap.ushell": {},
+				"sap.uxap": {}
       }
     },
     "contentDensities": {
@@ -95,40 +96,64 @@
         }
       ]
     },
-    "routing": {
-      "config": {
-        "routerClass": "sap.m.routing.Router",
-        "viewType": "XML",
-        "async": true,
-        "viewPath": "ap.salesorder.view",
-        "controlAggregation": "pages",
-        "controlId": "app",
-        "clearControlAggregation": false
-      },
-      "routes": [
-        {
-          "name": "RouteMain",
-          "pattern": ":?query:",
-          "target": [
-            "TargetMain"
-          ]
-        }
-      ],
-      "targets": {
-        "TargetMain": {
-          "viewType": "XML",
-          "transition": "slide",
-          "clearControlAggregation": false,
-          "viewId": "Main",
-          "viewName": "Main"
-        }
-      }
-    },
+
     "rootView": {
       "viewName": "ap.salesorder.view.App",
       "type": "XML",
       "async": true,
-      "id": "App"
+      "id": "fcl"
+  },
+  "routing": {
+    "config": {
+      "routerClass": "sap.f.routing.Router",
+      "type": "View",
+      "viewType": "XML",
+      "path": "ap.salesorder.view",
+      "controlId": "fcl",
+      "transition": "slide",
+      "bypassed": {},
+      "async": true,
+      "clearControlAggregation": false
+    },
+    "routes": [
+      {
+        "pattern": ":?layout:",
+        "name": "master",
+        "target": [
+          "master"
+        ]
+      },
+      {
+        "pattern": "detail/{salesorder}/{layout}",
+        "name": "detail",
+        "target": [
+          "master",
+          "detail"
+        ]
+      },
+      {
+        "pattern": "SalesOrderItems",
+        "name": "SalesOrderItems",
+        "target": [
+          "SalesOrderItems"
+        ]
+      }
+    ],
+    "targets": {
+      "master": {
+        "viewName": "Main",
+        "controlAggregation": "beginColumnPages"
+      },
+      "detail": {
+        "viewName": "SalesOrderDetail",
+        "controlAggregation": "midColumnPages"
+      },
+      "offer": {
+        "viewName": "SalesOrderItems",
+        "controlAggregation": "beginColumnPages"
+      }
     }
   }
+  }
 }
+

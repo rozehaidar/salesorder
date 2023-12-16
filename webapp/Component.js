@@ -5,9 +5,11 @@
 sap.ui.define([
         "sap/ui/core/UIComponent",
         "sap/ui/Device",
-        "ap/salesorder/model/models"
+        "ap/salesorder/model/models",
+        "sap/f/library"
+        
     ],
-    function (UIComponent, Device, models) {
+    function (UIComponent, Device, models, fioriLibrary) {
         "use strict";
 
         return UIComponent.extend("ap.salesorder.Component", {
@@ -25,10 +27,24 @@ sap.ui.define([
                 UIComponent.prototype.init.apply(this, arguments);
 
                 // enable routing
-                // this.getRouter().initialize();
+                 this.getRouter().initialize();
+                 this.getRouter().attachBeforeRouteMatched(this._onBeforeRouteMatched, this);
+
 
                 // set the device model
                 this.setModel(models.createDeviceModel(), "device");
+            },
+
+            _onBeforeRouteMatched: function(oEvent) {
+                var oModel = this.getModel("settings"),
+                    sLayout = oEvent.getParameters().arguments.layout;
+
+                // If there is no layout parameter, set a default layout (normally OneColumn)
+                if (!sLayout) {
+                    sLayout = fioriLibrary.LayoutType.OneColumn;
+                }
+
+                oModel.setProperty("/layout", sLayout);
             }
         });
     }

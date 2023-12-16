@@ -1,0 +1,15 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        title="SalesOrderItems {Id}"
+        type="Standard"
+    >
+        <Label text="SalesOrder" />
+        <Input value="{oSalesOrderItemsModel>/Vbeln}" />
+
+        <Button text="Cancel" press=".onCloseDialog"/>
+
+    </Dialog>
+</core:FragmentDefinition>
