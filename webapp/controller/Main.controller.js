@@ -5,99 +5,88 @@ sap.ui.define([
     '../util/SortAndFilterHelper',
     'sap/ui/export/Spreadsheet',
     'sap/ui/export/library'
-],
-    /**
-     * @param {typeof sap.ui.core.mvc.Controller} Controller
-     */
-    function (Controller,Device, fioriLibrary, SortAndFilterHelper, Spreadsheet, exportLibrary) {
-        "use strict";
+], function (Controller, Device, fioriLibrary, SortAndFilterHelper, Spreadsheet, exportLibrary) {
+    "use strict";
 
-        return Controller.extend("ap.salesorder.controller.Main", {
-            onInit: function () {
-                // Keeps reference to any of the created sap.m.ViewSettingsDialog-s in this sample
-                this._mViewSettingsDialogs = {};
-                
-            },
-            
-            onListItemPress: function (oEvent) {
-                let sSalesOrderPath = oEvent.getSource().getBindingContext().getPath(),
-                oSelectedSalesOrder = sSalesOrderPath.split("'")[1]; 
-                
-                this.getOwnerComponent().getRouter().navTo("detail", {layout: fioriLibrary.LayoutType.TwoColumnsMidExpanded, SalesOrder: oSelectedSalesOrder});
-            },
+    return Controller.extend("ap.salesorder.controller.Main", {
+        onInit: function () {
+            this._mViewSettingsDialogs = {};
+        },
 
-            onNavToSalesOrderItems: function(oEvent){
-                this.getOwnerComponent().getRouter().navTo("SalesOrderItems");
-            },
+        onListItemPress: function(oEvent) {
+            let sSalesOrderPath = oEvent.getSource().getBindingContext().getPath(),
+                oSelectedSalesOrder = sSalesOrderPath.split("'")[1];
+        
+            this.getOwnerComponent().getRouter().navTo("detail", {
+                layout: fioriLibrary.LayoutType.TwoColumnsMidExpanded,
+                salesorder: oSelectedSalesOrder // Change "salesOrder" to "salesorder"
+            });
+        },
+        
 
+        onNavToSalesOrderItems: function () {
+            this.getOwnerComponent().getRouter().navTo("SalesOrderItems");
+        },
 
-            handleSortButtonPressed: function () {
-                SortAndFilterHelper.handleSortButtonPressed(this, "ap.salesorder.fragments.sortDialog")
+        handleSortButtonPressed: function () {
+            SortAndFilterHelper.handleSortButtonPressed(this, "ap.salesorder.fragments.sortDialog");
+        },
 
-            },
+        handleSortDialogConfirm: function (oEvent) {
+            SortAndFilterHelper.handleSortDialogConfirm(oEvent, this, "SalesOrderTable");
+        },
 
-            
-            
-            handleSortDialogConfirm: function (oEvent) {
-                SortAndFilterHelper.handleSortDialogConfirm(oEvent, this, "SalesOrderTable")
-            },
+        handleFilterGo: function () {
+            SortAndFilterHelper.handleFilterBarGo(this, 'SalesOrderTable');
+        },
 
+        onExport: function () {
+            let aCols, oRowBinding, oSettings, oSheet, oTable;
 
-            
+            oTable = this.getView().byId("SalesOrderTable");
+            oRowBinding = oTable.getBinding('items');
+            aCols = this.createColumnConfig();
 
-            handleFilterGo: function(oEvent){
-                SortAndFilterHelper.handleFilterBarGo(this, 'SalesOrderTable')
-            }, 
+            oSettings = {
+                workbook: {
+                    columns: aCols,
+                    hierarchyLevel: 'Level'
+                },
+                dataSource: oRowBinding,
+                fileName: 'Table export sample.xlsx',
+                worker: false
+            };
 
-            onExport: function(oEvent) {
-                let aCols, oRowBinding, oSettings, oSheet, oTable;
+            oSheet = new Spreadsheet(oSettings);
+            oSheet.build().finally(function () {
+                oSheet.destroy();
+            });
+        },
 
+        createColumnConfig: function () {
+            let aCols = [];
+            let EdmType = exportLibrary.EdmType;
 
-                oTable = this.getView().byId("SalesOrderTable")
-                oRowBinding = oTable.getBinding('items')
-                aCols = this.createColumnConfig()
+            aCols.push({
+                label: 'Id',
+                property: ['Vbeln'],
+                type: EdmType.String,
+                template: 'Whatever you want - {0}'
+            });
 
-                oSettings = {
-                    workbook: {
-                        columns: aCols,
-                        hierarchyLevel: 'Level'
-                    },
-                    dataSource: oRowBinding,
-                    fileName: 'Table export sample.xlsx',
-                    worker: false // We need to disable worker because we are using a MockServer as OData Service
-                };
+            aCols.push({
+                label: 'Name',
+                type: EdmType.String,
+                property: 'Name',
+                scale: 0
+            });
 
-                oSheet = new Spreadsheet(oSettings);
-                oSheet.build().finally(function() {
-                    oSheet.destroy();
-                });
-            },
-            createColumnConfig: function() {
-                let aCols = []
-                let EdmType = exportLibrary.EdmType
+            aCols.push({
+                property: 'Erdat',
+                type: EdmType.String
+            });
 
-                aCols.push({
-                    label: 'Id',
-                    property: ['Vbeln'],
-                    type: EdmType.String,
-                    template: 'Whatever you want - {0}'
-                });
-
-                aCols.push({
-                    label: 'Name',
-                    type: EdmType.String,
-                    property: 'Name',
-                    scale: 0
-                });
-
-                aCols.push({
-                    property: 'Erdat',
-                    type: EdmType.String
-                });
-
-
-                return aCols;
-            },
-
-        });
+            return aCols;
+        }
     });
+});

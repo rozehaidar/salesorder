@@ -1,36 +1,34 @@
-sap.ui.define(
-    [
-        "sap/ui/core/mvc/Controller"
-    ],
-    function(BaseController) {
-      "use strict";
-  
-      return BaseController.extend("ap.salesorder.controller.App", {
-        
-        onInit: function () {
-          this.getOwnerComponent().getRouter().attachRouteMatched(this.onRouteMatched, this)
-        },
+sap.ui.define([
+  "sap/ui/core/mvc/Controller"
+], function(Controller) {
+  "use strict";
 
-        onRouteMatched: function (oEvent) {
-          let oSettingsModel = this.getOwnerComponent().getModel("settings")
-          oSettingsModel.setProperty("/RouteName", oEvent.getParameter("name")),
-          oSettingsModel.setProperty("/SalesOrderItem", oEvent.getParameter("arguments").SalesOrderItems);
-        },
-        onStateChanged: function (oEvent) {
-          let oSettingsModel = this.getOwnerComponent().getModel("settings")
-          let bIsNavigationArrow = oEvent.getParameter("isNavigationArrow"),
-            sLayout = oEvent.getParameter("layout");
+  return Controller.extend("ap.salesorder.controller.App", {
+      onInit: function() {
+          this.getOwnerComponent().getRouter().attachRouteMatched(this.onRouteMatched, this);
+      },
 
-          // Replace the URL with the new layout if a navigation arrow was used
+      onRouteMatched: function(oEvent) {
+          let oSettingsModel = this.getOwnerComponent().getModel("settings");
+          oSettingsModel.setProperty("/RouteName", oEvent.getParameter("name"));
+          oSettingsModel.setProperty("/SalesOrderItem", oEvent.getParameter("arguments").salesOrder || "");
+      },
+
+      onStateChanged: function(oEvent) {
+          let oSettingsModel = this.getOwnerComponent().getModel("settings"),
+              bIsNavigationArrow = oEvent.getParameter("isNavigationArrow"),
+              sLayout = oEvent.getParameter("layout");
+
           if (bIsNavigationArrow) {
-            this.oRouter.navTo(oSettingsModel.getProperty("/RouteName"), {layout: sLayout, SalesOrderItems: oSettingsModel.getProperty("/SalesOrderItem")}, true);
+              this.getOwnerComponent().getRouter().navTo(oSettingsModel.getProperty("/RouteName"), {
+                  layout: sLayout,
+                  salesOrder: oSettingsModel.getProperty("/SalesOrderItem")
+              }, true);
           }
-        },
-        onExit: function () {
-          this.getOwnerComponent().getRouter().detachRouteMatched(this.onRouteMatched, this);
-        },
+      },
 
-      });
-    }
-  );
-  
+      onExit: function() {
+          this.getOwnerComponent().getRouter().detachRouteMatched(this.onRouteMatched, this);
+      },
+  });
+});
