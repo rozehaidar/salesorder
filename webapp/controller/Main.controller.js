@@ -19,7 +19,7 @@ sap.ui.define([
         
             this.getOwnerComponent().getRouter().navTo("detail", {
                 layout: fioriLibrary.LayoutType.TwoColumnsMidExpanded,
-                salesorder: oSelectedSalesOrder // Change "salesOrder" to "salesorder"
+                salesOrder: oSelectedSalesOrder // Change "salesOrder" to "salesorder"
             });
         },
         

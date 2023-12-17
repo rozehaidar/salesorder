@@ -11,27 +11,18 @@ sap.ui.define([
         },
 
         _onSalesOrderMatched: function (oEvent) {
-            let sSalesOrderID = oEvent.getParameter("arguments").salesOrder || "0";
-            let that = this;
-
-            // Read the Sales Order details
-            this.getOwnerComponent().getModel().read(`/SalesOrderSet('${sSalesOrderID}')`, {
-                urlParameters: {
-                    "$format": "json",
-                    "$expand": "SalesOrderItemsSet"
-                },
-                success: function (oData) {
-                    console.log("Sales Order Data:", oData);
-        
-                    // Bind the Sales Order details to the view
-                    that.getView().bindElement({
-                        path: `/SalesOrderSet('${sSalesOrderID}')`
-                    });
-        
-                    // Create a JSON model for Sales Order Items and bind it to the table
-                    let oSalesOrderItemsModel = new sap.ui.model.json.JSONModel(oData.SalesOrderItemsSet);
-                    that.getView().byId("SalesOrderItemsTable").setModel(oSalesOrderItemsModel);
-                },
+            var sSalesOrderID = oEvent.getParameter("arguments").salesOrder || "0";
+          var sSalesPath = `/SalesOrderSet('${sSalesOrderID}')`;
+ 
+          this.getView().bindElement({
+            path: sSalesPath
+          });
+ 
+          var oTable = this.getView().byId("SalesOrderItemsTable");
+          oTable.bindItems({
+            path: sSalesPath + "/salesOrderItemsSet",
+            template: oTable.getBindingInfo("items").template,
+          
                 error: function (oError) {
                     // Handle the error
                     console.error("Error reading Sales Order details:", oError);

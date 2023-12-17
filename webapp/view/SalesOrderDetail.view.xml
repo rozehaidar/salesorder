@@ -27,7 +27,7 @@
                             </m:VBox>
 
                             <!-- Display Sales Order Items -->
-                            <m:Table id="SalesOrderItemsTable" items="{SalesOrderItemsSet}">
+                            <m:Table id="SalesOrderItemsTable" items="{SalesOrderSet>SalesOrderItemsSet/results}">
                                 <m:columns>
                                     <m:Column minScreenWidth="Tablet" demandPopin="true" hAlign="End">
                                         <m:Text text="Item Number" />

@@ -11,7 +11,7 @@ sap.ui.define([
       onRouteMatched: function(oEvent) {
           let oSettingsModel = this.getOwnerComponent().getModel("settings");
           oSettingsModel.setProperty("/RouteName", oEvent.getParameter("name"));
-          oSettingsModel.setProperty("/SalesOrderItem", oEvent.getParameter("arguments").salesOrder || "");
+          oSettingsModel.setProperty("/sales", oEvent.getParameter("arguments").sales|| "");
       },
 
       onStateChanged: function(oEvent) {
@@ -22,7 +22,7 @@ sap.ui.define([
           if (bIsNavigationArrow) {
               this.getOwnerComponent().getRouter().navTo(oSettingsModel.getProperty("/RouteName"), {
                   layout: sLayout,
-                  salesOrder: oSettingsModel.getProperty("/SalesOrderItem")
+                  salesOrder: oSettingsModel.getProperty("/sales")
               }, true);
           }
       },
