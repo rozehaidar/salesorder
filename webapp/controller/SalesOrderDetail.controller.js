@@ -20,7 +20,7 @@ sap.ui.define([
  
           var oTable = this.getView().byId("SalesOrderItemsTable");
           oTable.bindItems({
-            path: sSalesPath + "/salesOrderItemsSet",
+            path: sSalesPath + "/SalesOrderItemsSet",
             template: oTable.getBindingInfo("items").template,
           
                 error: function (oError) {
