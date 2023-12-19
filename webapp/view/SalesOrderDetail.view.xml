@@ -68,7 +68,7 @@
                         <blocks>
                             <m:Table
                                 id="SalesOrderItemsTable"
-                                items="{SalesOrderSet>SalesOrderItemsSet/results}"
+                                items="{SalesOrderItemsSet}"
                             >
                                 <m:headerToolbar>
                                     <m:OverflowToolbar>

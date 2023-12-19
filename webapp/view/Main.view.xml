@@ -9,7 +9,7 @@
         </f:header>
         <f:content>
             <VBox>
-                <Button icon="sap-icon://activities" type="Transparent" press="onNavToSalesOrderItems" text="Nav to Sales Order Items" />
+                
                 <Table id="SalesOrderTable" items="{/SalesOrderSet}">
                     <headerToolbar>
                         <OverflowToolbar>
